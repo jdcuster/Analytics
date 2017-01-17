@@ -5,8 +5,6 @@ using System.Text.RegularExpressions;
 using Analytics.Models;
 using Skybrud.Social.Google.Analytics.Responses;
 
-
-
 namespace Analytics
 {
     public static class ChartHelper
@@ -69,19 +67,20 @@ namespace Analytics
             {
                 
                 // Get the logged in user's language - if it is EN-US display chart labels as MM-DD-YYYY, otherwise keep the DD-MM-YYYY format.
-
+                
                 string userLang = Umbraco.Web.UmbracoContext.Current.Security.CurrentUser.Language.ToLower();
 
-                if (userLang == "en-us")
+                switch (userLang)
                 {
-                    chartLabels = apiResults.Rows.Select(row => row.Cells[1] + "/" + row.Cells[2] + "/" + row.Cells[0]).ToArray();
-                }
-                else
-                {
-                    chartLabels = apiResults.Rows.Select(row => row.Cells[2] + "/" + row.Cells[1] + "/" + row.Cells[0]).ToArray();
+                    case "en-us":
+                        chartLabels = apiResults.Rows.Select(row => row.Cells[1] + "/" + row.Cells[2] + "/" + row.Cells[0]).ToArray();
+                        break;
+                    default:
+                        chartLabels = apiResults.Rows.Select(row => row.Cells[2] + "/" + row.Cells[1] + "/" + row.Cells[0]).ToArray();
+                        break;
                 }
 
-                
+
             }
             else
             {
